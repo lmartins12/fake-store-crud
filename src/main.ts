@@ -1,5 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { AppComponent } from './app/app.component';
+import { AppComponent } from '@app/app.component';
+import { appConfig } from '@app/app.config';
+import { ThemeService } from '@core/index';
 
-bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig)
+  .then((appRef) => {
+    const themeService = appRef.injector.get(ThemeService);
+    themeService.initTheme();
+  })
+  .catch((err) => console.error(err));

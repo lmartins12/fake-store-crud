@@ -1,3 +1,4 @@
+@import "primeicons/primeicons.css";
 @import 'variables';
 @import 'typography';
 @import 'mixins';
@@ -22,12 +23,13 @@ html {
 }
 
 body {
-  font-family: $font-family-base;
+  font-family: var(--font-family, $font-family-base);
   font-size: $font-size-base;
   font-weight: $font-weight-normal;
   line-height: $line-height-normal;
-  color: $text-primary;
-  background-color: $background;
+  color: var(--text-color, $text-primary);
+  background-color: var(--surface-ground, $background);
+  transition: background-color $transition-base, color $transition-base;
 }
 
 /**

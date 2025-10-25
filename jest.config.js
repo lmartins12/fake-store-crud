@@ -13,6 +13,7 @@ module.exports = {
     '!src/app/**/index.ts',
     '!src/app/**/*.spec.ts',
     '!src/app/**/*.module.ts',
+    '!src/app/app.component.ts',
     '!src/main.ts',
     '!src/polyfills.ts',
   ],
