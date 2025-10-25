@@ -32,10 +32,6 @@ export class ThemeService {
     });
   }
 
-  public initTheme(): void {
-    this.applyTheme(THEME_MAP[this.themeSignal()]);
-  }
-
   public setTheme(theme: ThemeAlias): void {
     this.themeSignal.set(theme);
   }

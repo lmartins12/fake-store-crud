@@ -1,11 +1,9 @@
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from '@app/app.component';
 import { appConfig } from '@app/app.config';
-import { ThemeService } from '@core/index';
 
-bootstrapApplication(AppComponent, appConfig)
-  .then((appRef) => {
-    const themeService = appRef.injector.get(ThemeService);
-    themeService.initTheme();
-  })
-  .catch((err) => console.error(err));
+registerLocaleData(localePt, 'pt-BR');
+
+bootstrapApplication(AppComponent, appConfig).catch((err) => console.error(err));

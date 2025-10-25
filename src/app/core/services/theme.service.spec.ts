@@ -39,15 +39,12 @@ describe('ThemeService', () => {
   });
 
   it('deve aplicar tema no head do documento', () => {
-    service.initTheme();
-
     const link = document.getElementById('prime-theme-link') as HTMLLinkElement;
     expect(link).toBeTruthy();
     expect(link.href).toContain('mdc-light-indigo');
   });
 
   it('deve manter o mesmo elemento de link ao atualizar', () => {
-    service.initTheme();
     const linkInicial = document.getElementById('prime-theme-link') as HTMLLinkElement;
 
     service.setTheme('dark');
@@ -89,11 +86,10 @@ describe('ThemeService', () => {
   });
 
   it('não deve atualizar href se o tema já está aplicado', () => {
-    service.initTheme();
     const link = document.getElementById('prime-theme-link') as HTMLLinkElement;
     const hrefInicial = link.href;
 
-    service.initTheme();
+    service.setTheme('light');
     expect(link.href).toBe(hrefInicial);
   });
 
