@@ -1,0 +1,34 @@
+<div class="header">
+  <p-toolbar>
+    <div class="header__start">
+      <p-button
+        icon="pi pi-home"
+        [text]="true"
+        [routerLink]="['/products']"
+        class="header__home-btn"
+        severity="contrast"
+      />
+      <span class="header__title">Fake Store</span>
+    </div>
+
+    <div class="header__end">
+      <p-button
+        [icon]="theme() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"
+        [text]="true"
+        (onClick)="toggleTheme()"
+        class="header__theme-toggle"
+        severity="contrast"
+        [pTooltip]="theme() === 'dark' ? 'Tema Claro' : 'Tema Escuro'"
+        tooltipPosition="bottom"
+      />
+      <p-button
+        icon="pi pi-user"
+        [text]="true"
+        class="header__user-btn"
+        severity="contrast"
+        pTooltip="Usuário"
+        tooltipPosition="bottom"
+      />
+    </div>
+  </p-toolbar>
+</div>

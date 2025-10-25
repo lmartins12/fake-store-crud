@@ -49,5 +49,11 @@
     "jest-preset-angular": "^14.6.2",
     "prettier": "^3.6.2",
     "typescript": "~5.4.2"
+  },
+  "overrides": {
+    "jest-environment-jsdom": {
+      "jsdom": "25.0.1",
+      "rrweb-cssom": "0.8.0"
+    }
   }
 }

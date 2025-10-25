@@ -3,6 +3,9 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   coverageDirectory: 'coverage',
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'require', 'default'],
+  },
   collectCoverageFrom: [
     'src/app/**/*.ts',
     '!src/app/**/*.config.ts',
@@ -33,4 +36,3 @@ module.exports = {
     ],
   },
 };
-
