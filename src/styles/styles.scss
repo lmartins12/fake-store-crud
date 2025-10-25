@@ -1,0 +1,80 @@
+@import 'variables';
+@import 'typography';
+@import 'mixins';
+@import 'overrides';
+
+/**
+* ============================================
+* RESET E ESTILOS GLOBAIS
+* ============================================
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $text-primary;
+  background-color: $background;
+}
+
+/**
+* ============================================
+*           CLASSES UTILITÁRIAS GLOBAIS
+* ============================================
+*/
+
+/**
+* Container responsivo
+*/
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+
+  @include respond-to($breakpoint-lg) {
+    padding: 0 $spacing-xl;
+  }
+}
+
+/**
+* Scrollbar customizado global
+*/
+body {
+  @include custom-scrollbar();
+}
+
+/**
+* ============================================
+*           UTILITÁRIOS DE TEXTO
+* ============================================
+*/
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.truncate {
+  @include truncate;
+}
