@@ -1,1 +1,1 @@
-// temp
+export * from './services/theme.service';
