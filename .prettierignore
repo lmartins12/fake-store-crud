@@ -1,0 +1,17 @@
+# Build artifacts
+dist/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Configuration files
+package-lock.json
+
+# Angular generated files
+.angular/
+
+# Environment files
+*.log
+
