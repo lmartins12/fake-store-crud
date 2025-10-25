@@ -41,7 +41,7 @@ describe('ThemeService', () => {
   it('deve aplicar tema no head do documento', () => {
     const link = document.getElementById('prime-theme-link') as HTMLLinkElement;
     expect(link).toBeTruthy();
-    expect(link.href).toContain('mdc-light-indigo');
+    expect(link.href).toContain('aura-light-noir');
   });
 
   it('deve manter o mesmo elemento de link ao atualizar', () => {
