@@ -1,4 +1,4 @@
-@import "primeicons/primeicons.css";
+@import 'primeicons/primeicons.css';
 @import 'variables';
 @import 'typography';
 @import 'mixins';
@@ -29,7 +29,9 @@ body {
   line-height: $line-height-normal;
   color: var(--text-color, $text-primary);
   background-color: var(--surface-ground, $background);
-  transition: background-color $transition-base, color $transition-base;
+  transition:
+    background-color $transition-base,
+    color $transition-base;
 }
 
 /**
