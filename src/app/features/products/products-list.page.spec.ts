@@ -88,7 +88,7 @@ describe('ProductsListPage', () => {
 
   describe('Signals do facade', () => {
     it('deve usar products$ do facade', () => {
-      expect(component.products).toBe(mockFacade.products$);
+      expect(component.products()).toEqual(mockProducts);
     });
 
     it('deve usar loading$ do facade', () => {
@@ -204,7 +204,7 @@ describe('ProductsListPage', () => {
       const product = mockProducts[0];
       let acceptCallback: (() => void) | undefined;
 
-      (mockConfirmationService.confirm as jest.Mock).mockImplementation((config: any) => {
+      (mockConfirmationService.confirm as jest.Mock).mockImplementation((config) => {
         acceptCallback = config.accept;
         return mockConfirmationService;
       });

@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { IProduct } from '@core/index';
 import { HeaderComponent } from '@shared/index';
 import { ConfirmationService } from 'primeng/api';
@@ -42,7 +49,7 @@ export class ProductsListPage implements OnInit {
   private readonly facade = inject(ProductsFacadeService);
   private readonly confirmationService = inject(ConfirmationService);
 
-  public readonly products = this.facade.products$;
+  public readonly products = computed(() => [...this.facade.products$()]);
   public readonly loading = this.facade.loading$;
 
   public readonly showFormDialog = signal<boolean>(false);
