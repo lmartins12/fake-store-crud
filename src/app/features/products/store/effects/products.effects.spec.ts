@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { IProduct, MockProductService } from '@core/index';
 import { provideMockActions } from '@ngrx/effects/testing';
+import { MessageService } from 'primeng/api';
 import { Observable, of, throwError } from 'rxjs';
 import { ProductsActions } from '../actions/products.actions';
 import {
@@ -13,6 +14,7 @@ import {
 describe('ProductsEffects', () => {
   let actions$: Observable<unknown>;
   let mockProductService: jest.Mocked<MockProductService>;
+  let mockMessageService: jest.Mocked<MessageService>;
 
   const mockProduct: IProduct = {
     id: 1,
@@ -33,10 +35,15 @@ describe('ProductsEffects', () => {
       deleteProduct: jest.fn(),
     } as unknown as jest.Mocked<MockProductService>;
 
+    mockMessageService = {
+      add: jest.fn(),
+    } as unknown as jest.Mocked<MessageService>;
+
     TestBed.configureTestingModule({
       providers: [
         provideMockActions(() => actions$),
         { provide: MockProductService, useValue: mockProductService },
+        { provide: MessageService, useValue: mockMessageService },
       ],
     });
   });
@@ -47,7 +54,7 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.loadProducts());
 
       TestBed.runInInjectionContext(() => {
-        const result = loadProductsEffect(actions$, mockProductService);
+        const result = loadProductsEffect(actions$, mockProductService, mockMessageService);
         expect(typeof loadProductsEffect).toBe('function');
         expect(result).toBeDefined();
         expect(typeof result.subscribe).toBe('function');
@@ -61,7 +68,7 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.createProduct({ product: newProduct }));
 
       TestBed.runInInjectionContext(() => {
-        const result = createProductEffect(actions$, mockProductService);
+        const result = createProductEffect(actions$, mockProductService, mockMessageService);
         expect(typeof createProductEffect).toBe('function');
         expect(result).toBeDefined();
         expect(typeof result.subscribe).toBe('function');
@@ -73,7 +80,7 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.updateProduct({ id: 1, product: mockProduct }));
 
       TestBed.runInInjectionContext(() => {
-        const result = updateProductEffect(actions$, mockProductService);
+        const result = updateProductEffect(actions$, mockProductService, mockMessageService);
         expect(typeof updateProductEffect).toBe('function');
         expect(result).toBeDefined();
         expect(typeof result.subscribe).toBe('function');
@@ -85,7 +92,7 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.deleteProduct({ id: 1 }));
 
       TestBed.runInInjectionContext(() => {
-        const result = deleteProductEffect(actions$, mockProductService);
+        const result = deleteProductEffect(actions$, mockProductService, mockMessageService);
         expect(typeof deleteProductEffect).toBe('function');
         expect(result).toBeDefined();
         expect(typeof result.subscribe).toBe('function');
@@ -99,30 +106,37 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.loadProducts());
 
       TestBed.runInInjectionContext(() => {
-        const effect = loadProductsEffect(actions$, mockProductService);
+        const effect = loadProductsEffect(actions$, mockProductService, mockMessageService);
         expect(effect).toBeDefined();
 
         effect.subscribe((action) => {
           expect(action).toEqual(ProductsActions.loadProductsSuccess({ products: mockProducts }));
           expect(mockProductService.getAllProducts).toHaveBeenCalled();
+          expect(mockMessageService.add).not.toHaveBeenCalled();
           done();
         });
       });
     });
 
-    it('deve retornar loadProductsFailure em caso de erro', (done) => {
+    it('deve retornar loadProductsFailure e exibir toast de erro em caso de erro', (done) => {
       const error = new Error('Erro ao carregar');
       mockProductService.getAllProducts.mockReturnValue(throwError(() => error));
       actions$ = of(ProductsActions.loadProducts());
 
       TestBed.runInInjectionContext(() => {
-        const effect = loadProductsEffect(actions$, mockProductService);
+        const effect = loadProductsEffect(actions$, mockProductService, mockMessageService);
 
         effect.subscribe((action) => {
           expect(action).toEqual(
             ProductsActions.loadProductsFailure({ error: 'Erro ao carregar' })
           );
           expect(mockProductService.getAllProducts).toHaveBeenCalled();
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'error',
+              summary: 'Erro',
+            })
+          );
           done();
         });
       });
@@ -133,23 +147,24 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.loadProducts());
 
       TestBed.runInInjectionContext(() => {
-        loadProductsEffect(actions$, mockProductService).subscribe((action) => {
+        loadProductsEffect(actions$, mockProductService, mockMessageService).subscribe((action) => {
           expect(action).toEqual(ProductsActions.loadProductsSuccess({ products: [] }));
           done();
         });
       });
     });
 
-    it('deve lidar com erro sem mensagem', (done) => {
+    it('deve lidar com erro sem mensagem e exibir toast', (done) => {
       const error = new Error();
       mockProductService.getAllProducts.mockReturnValue(throwError(() => error));
       actions$ = of(ProductsActions.loadProducts());
 
       TestBed.runInInjectionContext(() => {
-        loadProductsEffect(actions$, mockProductService).subscribe((action) => {
+        loadProductsEffect(actions$, mockProductService, mockMessageService).subscribe((action) => {
           expect(action).toEqual(
             ProductsActions.loadProductsFailure({ error: expect.any(String) })
           );
+          expect(mockMessageService.add).toHaveBeenCalled();
           done();
         });
       });
@@ -157,7 +172,7 @@ describe('ProductsEffects', () => {
   });
 
   describe('createProductEffect', () => {
-    it('deve retornar createProductSuccess em caso de sucesso', (done) => {
+    it('deve retornar createProductSuccess e exibir toast de sucesso', (done) => {
       const newProduct = { ...mockProduct };
       delete (newProduct as unknown as { id?: number }).id;
 
@@ -165,18 +180,24 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.createProduct({ product: newProduct }));
 
       TestBed.runInInjectionContext(() => {
-        const effect = createProductEffect(actions$, mockProductService);
+        const effect = createProductEffect(actions$, mockProductService, mockMessageService);
         expect(effect).toBeDefined();
 
         effect.subscribe((action) => {
           expect(action).toEqual(ProductsActions.createProductSuccess({ product: mockProduct }));
           expect(mockProductService.createProduct).toHaveBeenCalledWith(newProduct);
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'success',
+              summary: 'Sucesso',
+            })
+          );
           done();
         });
       });
     });
 
-    it('deve retornar createProductFailure em caso de erro', (done) => {
+    it('deve retornar createProductFailure e exibir toast de erro', (done) => {
       const newProduct = { ...mockProduct };
       delete (newProduct as unknown as { id?: number }).id;
       const error = new Error('Erro ao criar');
@@ -185,11 +206,17 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.createProduct({ product: newProduct }));
 
       TestBed.runInInjectionContext(() => {
-        const effect = createProductEffect(actions$, mockProductService);
+        const effect = createProductEffect(actions$, mockProductService, mockMessageService);
 
         effect.subscribe((action) => {
           expect(action).toEqual(ProductsActions.createProductFailure({ error: 'Erro ao criar' }));
           expect(mockProductService.createProduct).toHaveBeenCalled();
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'error',
+              summary: 'Erro',
+            })
+          );
           done();
         });
       });
@@ -207,7 +234,7 @@ describe('ProductsEffects', () => {
 
       TestBed.runInInjectionContext(() => {
         const results: unknown[] = [];
-        createProductEffect(actions$, mockProductService).subscribe({
+        createProductEffect(actions$, mockProductService, mockMessageService).subscribe({
           next: (action) => results.push(action),
           complete: () => {
             expect(results.length).toBeGreaterThan(0);
@@ -219,38 +246,50 @@ describe('ProductsEffects', () => {
   });
 
   describe('updateProductEffect', () => {
-    it('deve retornar updateProductSuccess em caso de sucesso', (done) => {
+    it('deve retornar updateProductSuccess e exibir toast de sucesso', (done) => {
       const updatedProduct = { ...mockProduct, title: 'Updated' };
 
       mockProductService.updateProduct.mockReturnValue(of(updatedProduct));
       actions$ = of(ProductsActions.updateProduct({ id: 1, product: updatedProduct }));
 
       TestBed.runInInjectionContext(() => {
-        const effect = updateProductEffect(actions$, mockProductService);
+        const effect = updateProductEffect(actions$, mockProductService, mockMessageService);
         expect(effect).toBeDefined();
 
         effect.subscribe((action) => {
           expect(action).toEqual(ProductsActions.updateProductSuccess({ product: updatedProduct }));
           expect(mockProductService.updateProduct).toHaveBeenCalledWith(1, updatedProduct);
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'success',
+              summary: 'Sucesso',
+            })
+          );
           done();
         });
       });
     });
 
-    it('deve retornar updateProductFailure em caso de erro', (done) => {
+    it('deve retornar updateProductFailure e exibir toast de erro', (done) => {
       const error = new Error('Erro ao atualizar');
 
       mockProductService.updateProduct.mockReturnValue(throwError(() => error));
       actions$ = of(ProductsActions.updateProduct({ id: 1, product: mockProduct }));
 
       TestBed.runInInjectionContext(() => {
-        const effect = updateProductEffect(actions$, mockProductService);
+        const effect = updateProductEffect(actions$, mockProductService, mockMessageService);
 
         effect.subscribe((action) => {
           expect(action).toEqual(
             ProductsActions.updateProductFailure({ error: 'Erro ao atualizar' })
           );
           expect(mockProductService.updateProduct).toHaveBeenCalled();
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'error',
+              summary: 'Erro',
+            })
+          );
           done();
         });
       });
@@ -263,46 +302,62 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.updateProduct({ id: 5, product: updatedProduct }));
 
       TestBed.runInInjectionContext(() => {
-        updateProductEffect(actions$, mockProductService).subscribe((action) => {
-          expect(action).toEqual(ProductsActions.updateProductSuccess({ product: updatedProduct }));
-          expect(mockProductService.updateProduct).toHaveBeenCalledWith(5, updatedProduct);
-          done();
-        });
+        updateProductEffect(actions$, mockProductService, mockMessageService).subscribe(
+          (action) => {
+            expect(action).toEqual(
+              ProductsActions.updateProductSuccess({ product: updatedProduct })
+            );
+            expect(mockProductService.updateProduct).toHaveBeenCalledWith(5, updatedProduct);
+            done();
+          }
+        );
       });
     });
   });
 
   describe('deleteProductEffect', () => {
-    it('deve retornar deleteProductSuccess em caso de sucesso', (done) => {
+    it('deve retornar deleteProductSuccess e exibir toast de sucesso', (done) => {
       mockProductService.deleteProduct.mockReturnValue(of(void 0));
       actions$ = of(ProductsActions.deleteProduct({ id: 1 }));
 
       TestBed.runInInjectionContext(() => {
-        const effect = deleteProductEffect(actions$, mockProductService);
+        const effect = deleteProductEffect(actions$, mockProductService, mockMessageService);
         expect(effect).toBeDefined();
 
         effect.subscribe((action) => {
           expect(action).toEqual(ProductsActions.deleteProductSuccess({ id: 1 }));
           expect(mockProductService.deleteProduct).toHaveBeenCalledWith(1);
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'success',
+              summary: 'Sucesso',
+            })
+          );
           done();
         });
       });
     });
 
-    it('deve retornar deleteProductFailure em caso de erro', (done) => {
+    it('deve retornar deleteProductFailure e exibir toast de erro', (done) => {
       const error = new Error('Erro ao deletar');
 
       mockProductService.deleteProduct.mockReturnValue(throwError(() => error));
       actions$ = of(ProductsActions.deleteProduct({ id: 1 }));
 
       TestBed.runInInjectionContext(() => {
-        const effect = deleteProductEffect(actions$, mockProductService);
+        const effect = deleteProductEffect(actions$, mockProductService, mockMessageService);
 
         effect.subscribe((action) => {
           expect(action).toEqual(
             ProductsActions.deleteProductFailure({ error: 'Erro ao deletar' })
           );
           expect(mockProductService.deleteProduct).toHaveBeenCalled();
+          expect(mockMessageService.add).toHaveBeenCalledWith(
+            expect.objectContaining({
+              severity: 'error',
+              summary: 'Erro',
+            })
+          );
           done();
         });
       });
@@ -313,26 +368,31 @@ describe('ProductsEffects', () => {
       actions$ = of(ProductsActions.deleteProduct({ id: 99 }));
 
       TestBed.runInInjectionContext(() => {
-        deleteProductEffect(actions$, mockProductService).subscribe((action) => {
-          expect(action).toEqual(ProductsActions.deleteProductSuccess({ id: 99 }));
-          expect(mockProductService.deleteProduct).toHaveBeenCalledWith(99);
-          done();
-        });
+        deleteProductEffect(actions$, mockProductService, mockMessageService).subscribe(
+          (action) => {
+            expect(action).toEqual(ProductsActions.deleteProductSuccess({ id: 99 }));
+            expect(mockProductService.deleteProduct).toHaveBeenCalledWith(99);
+            done();
+          }
+        );
       });
     });
 
-    it('deve retornar erro genérico quando erro não tem mensagem', (done) => {
+    it('deve retornar erro genérico e exibir toast quando erro não tem mensagem', (done) => {
       const error = new Error();
       mockProductService.deleteProduct.mockReturnValue(throwError(() => error));
       actions$ = of(ProductsActions.deleteProduct({ id: 1 }));
 
       TestBed.runInInjectionContext(() => {
-        deleteProductEffect(actions$, mockProductService).subscribe((action) => {
-          expect(action).toEqual(
-            ProductsActions.deleteProductFailure({ error: expect.any(String) })
-          );
-          done();
-        });
+        deleteProductEffect(actions$, mockProductService, mockMessageService).subscribe(
+          (action) => {
+            expect(action).toEqual(
+              ProductsActions.deleteProductFailure({ error: expect.any(String) })
+            );
+            expect(mockMessageService.add).toHaveBeenCalled();
+            done();
+          }
+        );
       });
     });
   });

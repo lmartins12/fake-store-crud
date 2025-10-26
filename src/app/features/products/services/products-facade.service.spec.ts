@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { IProduct } from '@core/index';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { MessageService } from 'primeng/api';
 import { ProductsActions } from '../store/actions/products.actions';
 import { initialProductsState } from '../store/reducers/products.reducer';
 import { ProductsFacadeService } from './products-facade.service';
@@ -10,7 +9,6 @@ import { ProductsFacadeService } from './products-facade.service';
 describe('ProductsFacadeService', () => {
   let service: ProductsFacadeService;
   let store: MockStore;
-  let messageService: jest.Mocked<MessageService>;
   let dispatchSpy: jest.SpyInstance;
 
   const mockProduct: IProduct = {
@@ -23,15 +21,10 @@ describe('ProductsFacadeService', () => {
   };
 
   beforeEach(() => {
-    messageService = {
-      add: jest.fn(),
-    } as unknown as jest.Mocked<MessageService>;
-
     TestBed.configureTestingModule({
       providers: [
         ProductsFacadeService,
         provideMockStore({ initialState: { products: initialProductsState } }),
-        { provide: MessageService, useValue: messageService },
       ],
     });
 
@@ -76,7 +69,7 @@ describe('ProductsFacadeService', () => {
       expect(dispatchSpy).toHaveBeenCalledWith(ProductsActions.loadProducts());
     });
 
-    it('deve disparar createProduct action e exibir mensagem', () => {
+    it('deve disparar createProduct action', () => {
       const productData: Omit<IProduct, 'id'> = {
         title: 'New Product',
         price: 50,
@@ -90,10 +83,9 @@ describe('ProductsFacadeService', () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         ProductsActions.createProduct({ product: productData })
       );
-      expect(messageService.add).toHaveBeenCalled();
     });
 
-    it('deve disparar updateProduct action e exibir mensagem', () => {
+    it('deve disparar updateProduct action', () => {
       const updatedProduct: IProduct = { ...mockProduct, title: 'Updated Product' };
 
       service.updateProduct(1, updatedProduct);
@@ -101,14 +93,12 @@ describe('ProductsFacadeService', () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         ProductsActions.updateProduct({ id: 1, product: updatedProduct })
       );
-      expect(messageService.add).toHaveBeenCalled();
     });
 
-    it('deve disparar deleteProduct action e exibir mensagem', () => {
+    it('deve disparar deleteProduct action', () => {
       service.deleteProduct(1);
 
       expect(dispatchSpy).toHaveBeenCalledWith(ProductsActions.deleteProduct({ id: 1 }));
-      expect(messageService.add).toHaveBeenCalled();
     });
 
     it('deve disparar setSelectedProduct action', () => {
@@ -137,22 +127,6 @@ describe('ProductsFacadeService', () => {
       service.clearError();
 
       expect(dispatchSpy).toHaveBeenCalledWith(ProductsActions.clearError());
-    });
-  });
-
-  describe('showError', () => {
-    it('deve exibir mensagem de erro quando showError for chamado', () => {
-      service.showError('load');
-      expect(messageService.add).toHaveBeenCalled();
-    });
-
-    it('deve chamar messageService.add com mensagem de erro apropriada', () => {
-      service.showError('create');
-      expect(messageService.add).toHaveBeenCalledWith(
-        expect.objectContaining({
-          severity: expect.any(String),
-        })
-      );
     });
   });
 });
