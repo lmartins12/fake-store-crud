@@ -1,0 +1,90 @@
+<app-header />
+
+<div class="products-page">
+  <div class="products-page__header">
+    <div class="products-page__title-wrapper">
+      <h1 class="products-page__title">Produtos</h1>
+      <i
+        [class]="viewMode() === 'table' ? 'pi pi-list' : 'pi pi-th-large'"
+        class="products-page__view-icon"
+        (click)="toggleViewMode()"
+        (keyup.enter)="toggleViewMode()"
+        [pTooltip]="viewMode() === 'table' ? 'Alternar para Catálogo' : 'Alternar para Tabela'"
+        tooltipPosition="right"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="
+          viewMode() === 'table'
+            ? 'Alternar para visualização em catálogo'
+            : 'Alternar para visualização em tabela'
+        "
+      ></i>
+    </div>
+    <div class="products-page__header-actions">
+      <p-button
+        icon="pi pi-plus-circle"
+        (onClick)="openCreateDialog()"
+        severity="contrast"
+        [pTooltip]="'Adicionar Produto'"
+        tooltipPosition="left"
+      />
+    </div>
+  </div>
+
+  <div class="products-page__content">
+    @if (viewMode() === 'table') {
+      <app-product-table
+        [products]="products()"
+        [loading]="loading()"
+        (view)="openDetailsDialog($event)"
+        (edit)="openEditDialog($event)"
+        (delete)="handleDelete($event)"
+      />
+    }
+    @if (viewMode() === 'catalog') {
+      <app-product-catalog
+        [products]="products()"
+        [loading]="loading()"
+        (view)="openDetailsDialog($event)"
+        (edit)="openEditDialog($event)"
+        (delete)="handleDelete($event)"
+      />
+    }
+  </div>
+</div>
+
+<!-- Dialog de Formulário (Create/Edit) -->
+<p-dialog
+  [header]="selectedProduct() ? 'Editar Produto' : 'Novo Produto'"
+  [(visible)]="showFormDialog"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [breakpoints]="{ '960px': '75vw', '640px': '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <app-product-form
+    [product]="selectedProduct()"
+    (saveProduct)="handleSave($event)"
+    (cancelEdit)="closeDialogs()"
+  />
+</p-dialog>
+
+<!-- Dialog de Detalhes -->
+<p-dialog
+  header="Detalhes do Produto"
+  [(visible)]="showDetailsDialog"
+  [modal]="true"
+  [style]="{ width: '70vw' }"
+  [breakpoints]="{ '960px': '85vw', '640px': '95vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  @if (selectedProduct()) {
+    <app-product-details [product]="selectedProduct()!" (closeDialog)="closeDialogs()" />
+  }
+</p-dialog>
+
+<p-toast position="top-right" />
+
+<p-confirmDialog />

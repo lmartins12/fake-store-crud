@@ -4,12 +4,12 @@ import { Injectable, Signal, WritableSignal, effect, inject, signal } from '@ang
 const PRIME_THEME_ID = 'prime-theme-link';
 const THEME_STORAGE_KEY = 'fake-store-theme';
 
-export type PrimeTheme = 'mdc-light-indigo' | 'mdc-dark-indigo';
+export type PrimeTheme = 'aura-light-noir' | 'aura-dark-noir';
 export type ThemeAlias = 'light' | 'dark';
 
 const THEME_MAP: Record<ThemeAlias, PrimeTheme> = {
-  light: 'mdc-light-indigo',
-  dark: 'mdc-dark-indigo',
+  light: 'aura-light-noir',
+  dark: 'aura-dark-noir',
 };
 
 @Injectable({ providedIn: 'root' })
@@ -30,10 +30,6 @@ export class ThemeService {
       this.persistTheme(alias);
       this.applyTheme(THEME_MAP[alias]);
     });
-  }
-
-  public initTheme(): void {
-    this.applyTheme(THEME_MAP[this.themeSignal()]);
   }
 
   public setTheme(theme: ThemeAlias): void {

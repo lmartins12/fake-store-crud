@@ -1,0 +1,59 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.875rem;
+  }
+
+  &__required {
+    color: var(--red-500);
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+  }
+
+  &__input--error {
+    border-color: var(--red-500) !important;
+  }
+
+  &__error {
+    color: var(--red-500);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  &__input-number,
+  &__dropdown {
+    width: 100%;
+
+    ::ng-deep .p-inputnumber-input {
+      width: 100%;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--surface-border);
+
+    button {
+      flex: 1;
+      max-width: 200px;
+    }
+  }
+}

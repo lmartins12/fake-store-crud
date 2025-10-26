@@ -1,0 +1,50 @@
+<div class="product-details">
+  <div class="product-details__container">
+    <div class="product-details__image-section">
+      <div class="product-details__image-wrapper">
+        @if (product().image) {
+          <img
+            [src]="product().image"
+            [alt]="product().title"
+            class="product-details__image"
+            (error)="onImageError($event)"
+          />
+        }
+        <div class="product-details__image-fallback" style="display: none">
+          <i class="pi pi-image"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-details__info-section">
+      <div class="product-details__header">
+        <h2 class="product-details__title">{{ product().title }}</h2>
+        <p-tag
+          [value]="product().category"
+          severity="secondary"
+          class="product-details__category-tag"
+        ></p-tag>
+      </div>
+
+      <div class="product-details__price-container">
+        <span class="product-details__price-label">Preço:</span>
+        <span class="product-details__price">
+          {{ product().price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+        </span>
+      </div>
+
+      <div class="product-details__description-container">
+        <h3 class="product-details__description-title">Descrição</h3>
+        <p class="product-details__description">{{ product().description }}</p>
+      </div>
+
+      <div class="product-details__metadata">
+        <span class="product-details__id">ID: {{ product().id }}</span>
+      </div>
+
+      <div class="product-details__actions">
+        <p-button label="Fechar" icon="pi pi-times" severity="secondary" (onClick)="onClose()" />
+      </div>
+    </div>
+  </div>
+</div>

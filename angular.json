@@ -20,28 +20,24 @@
             "outputPath": "dist/fake-store-crud",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/styles"
-              ]
+              "includePaths": ["src/styles"]
             },
             "assets": [
               "src/favicon.ico",
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "node_modules/primeng/resources/themes/mdc-light-indigo",
-                "output": "assets/themes/mdc-light-indigo"
+                "input": "node_modules/primeng/resources/themes/aura-light-noir",
+                "output": "assets/themes/aura-light-noir"
               },
               {
                 "glob": "**/*",
-                "input": "node_modules/primeng/resources/themes/mdc-dark-indigo",
-                "output": "assets/themes/mdc-dark-indigo"
+                "input": "node_modules/primeng/resources/themes/aura-dark-noir",
+                "output": "assets/themes/aura-dark-noir"
               }
             ],
             "styles": [
