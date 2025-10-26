@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { IProduct, MockProductService } from '@core/index';
+import { IProduct, ProductService } from '@core/index';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { MessageService } from 'primeng/api';
 import { Observable, of, throwError } from 'rxjs';
@@ -13,7 +13,7 @@ import {
 
 describe('ProductsEffects', () => {
   let actions$: Observable<unknown>;
-  let mockProductService: jest.Mocked<MockProductService>;
+  let mockProductService: jest.Mocked<ProductService>;
   let mockMessageService: jest.Mocked<MessageService>;
 
   const mockProduct: IProduct = {
@@ -33,7 +33,7 @@ describe('ProductsEffects', () => {
       createProduct: jest.fn(),
       updateProduct: jest.fn(),
       deleteProduct: jest.fn(),
-    } as unknown as jest.Mocked<MockProductService>;
+    } as unknown as jest.Mocked<ProductService>;
 
     mockMessageService = {
       add: jest.fn(),
@@ -42,7 +42,7 @@ describe('ProductsEffects', () => {
     TestBed.configureTestingModule({
       providers: [
         provideMockActions(() => actions$),
-        { provide: MockProductService, useValue: mockProductService },
+        { provide: ProductService, useValue: mockProductService },
         { provide: MessageService, useValue: mockMessageService },
       ],
     });
