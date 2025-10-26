@@ -1,0 +1,120 @@
+<p-dataView
+  [value]="products()"
+  [loading]="loading()"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  layout="grid"
+>
+  <ng-template pTemplate="header">
+    <div class="product-catalog__header">
+      <span class="product-catalog__count"> {{ products().length }} produto(s) encontrado(s) </span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="grid" let-products>
+    @if (loading()) {
+      <div class="product-catalog__grid">
+        @for (item of skeletonItems; track $index) {
+          <div class="product-catalog__grid-item">
+            <div class="product-catalog__skeleton">
+              <p-skeleton width="100%" height="200px" styleClass="mb-3"></p-skeleton>
+              <p-skeleton width="0%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="80%" height="2rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="0%" height="1rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="40%" height="1.5rem" styleClass="mb-3"></p-skeleton>
+              <div class="product-catalog__skeleton-actions">
+                <p-skeleton shape="circle" size="2.5rem"></p-skeleton>
+                <p-skeleton shape="circle" size="2.5rem"></p-skeleton>
+                <p-skeleton shape="circle" size="2.5rem"></p-skeleton>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+    @if (!loading()) {
+      <div class="product-catalog__grid">
+        @for (product of products; track product.id) {
+          <div class="product-catalog__grid-column">
+            <div class="product-catalog__card">
+              <div class="product-catalog__card-header">
+                <div class="product-catalog__image-container">
+                  @if (product.image) {
+                    <img
+                      [src]="product.image"
+                      [alt]="product.title"
+                      class="product-catalog__image"
+                      (error)="onImageError($event)"
+                    />
+                  }
+                  <div class="product-catalog__image-fallback" style="display: none">
+                    <i class="pi pi-image"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="product-catalog__card-body">
+                <div class="product-catalog__content">
+                  <h3
+                    class="product-catalog__title"
+                    [pTooltip]="product.title"
+                    tooltipPosition="top"
+                  >
+                    {{ product.title }}
+                  </h3>
+                  <p class="product-catalog__description">
+                    {{ product.description }}
+                  </p>
+                  <span class="product-catalog__category">
+                    <i class="pi pi-tag"></i>
+                    {{ product.category }}
+                  </span>
+                  <div class="product-catalog__price">
+                    {{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="product-catalog__card-footer">
+                <div class="product-catalog__actions">
+                  <p-button
+                    icon="pi pi-eye"
+                    [text]="true"
+                    severity="info"
+                    (onClick)="onView(product)"
+                    pTooltip="Visualizar"
+                    tooltipPosition="top"
+                  />
+                  <p-button
+                    icon="pi pi-pencil"
+                    [text]="true"
+                    severity="secondary"
+                    (onClick)="onEdit(product)"
+                    pTooltip="Editar"
+                    tooltipPosition="top"
+                  />
+                  <p-button
+                    icon="pi pi-trash"
+                    [text]="true"
+                    severity="danger"
+                    (onClick)="onDelete(product)"
+                    pTooltip="Deletar"
+                    tooltipPosition="top"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </ng-template>
+
+  <ng-template pTemplate="empty">
+    <div class="product-catalog__empty">
+      <i class="pi pi-inbox product-catalog__empty-icon"></i>
+      <p class="product-catalog__empty-text">Nenhum produto encontrado</p>
+    </div>
+  </ng-template>
+</p-dataView>
