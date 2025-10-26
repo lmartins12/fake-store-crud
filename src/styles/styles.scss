@@ -32,6 +32,45 @@ body {
 }
 
 /**
+* Loading overlay transparente
+*/
+.p-datatable-loading-overlay,
+.p-dataview-loading-overlay {
+  background-color: transparent !important;
+}
+
+/**
+* Customização global dos diálogos
+* - Mantém margem de 16px em telas estreitas
+* - Adiciona espaçamento entre botões de confirmação
+*/
+.p-dialog,
+.p-confirm-dialog {
+  @media (max-width: 640px) {
+    width: calc(100vw - 32px) !important;
+    max-width: calc(100vw - 32px) !important;
+  }
+}
+
+.p-confirm-dialog {
+  .p-dialog-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem;
+
+    button {
+      flex: 1;
+      max-width: 200px;
+    }
+  }
+
+  .p-confirm-dialog-message {
+    margin-left: 1rem;
+  }
+}
+
+/**
 * ============================================
 *           CLASSES UTILITÁRIAS GLOBAIS
 * ============================================
