@@ -1,1 +1,1 @@
-// temp
+export * from './products/products-list.page';
