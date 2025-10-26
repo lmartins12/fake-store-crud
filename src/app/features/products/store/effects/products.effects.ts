@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { MockProductService } from '@core/index';
+import { ProductService } from '@core/index';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { MessageService } from 'primeng/api';
 import { catchError, exhaustMap, map, of, switchMap } from 'rxjs';
@@ -9,7 +9,7 @@ import { ProductsActions } from '../actions/products.actions';
 export const loadProductsEffect = createEffect(
   (
     actions$ = inject(Actions),
-    productService = inject(MockProductService),
+    productService = inject(ProductService),
     messageService = inject(MessageService)
   ) => {
     return actions$.pipe(
@@ -31,7 +31,7 @@ export const loadProductsEffect = createEffect(
 export const createProductEffect = createEffect(
   (
     actions$ = inject(Actions),
-    productService = inject(MockProductService),
+    productService = inject(ProductService),
     messageService = inject(MessageService)
   ) => {
     return actions$.pipe(
@@ -56,7 +56,7 @@ export const createProductEffect = createEffect(
 export const updateProductEffect = createEffect(
   (
     actions$ = inject(Actions),
-    productService = inject(MockProductService),
+    productService = inject(ProductService),
     messageService = inject(MessageService)
   ) => {
     return actions$.pipe(
@@ -81,7 +81,7 @@ export const updateProductEffect = createEffect(
 export const deleteProductEffect = createEffect(
   (
     actions$ = inject(Actions),
-    productService = inject(MockProductService),
+    productService = inject(ProductService),
     messageService = inject(MessageService)
   ) => {
     return actions$.pipe(
