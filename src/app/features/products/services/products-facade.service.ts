@@ -1,45 +1,48 @@
 import { Injectable, inject } from '@angular/core';
-import { IProduct, MockProductService } from '@core/index';
-import { MessageService } from 'primeng/api';
-import { Observable, tap } from 'rxjs';
-import { PRODUCTS_LIST_CONSTANTS } from '../constants/products-list.constants';
+import { IProduct } from '@core/index';
+import { Store } from '@ngrx/store';
+import {
+  ProductsActions,
+  selectAllProducts,
+  selectProductsError,
+  selectProductsLoading,
+  selectSelectedProduct,
+} from '../store';
 
 @Injectable()
 export class ProductsFacadeService {
-  private readonly productService = inject(MockProductService);
-  private readonly messageService = inject(MessageService);
+  private readonly store = inject(Store);
 
-  private readonly constants = PRODUCTS_LIST_CONSTANTS;
+  public readonly products$ = this.store.selectSignal(selectAllProducts);
+  public readonly loading$ = this.store.selectSignal(selectProductsLoading);
+  public readonly error$ = this.store.selectSignal(selectProductsError);
+  public readonly selectedProduct$ = this.store.selectSignal(selectSelectedProduct);
 
-  public loadProducts(): Observable<IProduct[]> {
-    return this.productService.getAllProducts();
+  public loadProducts(): void {
+    this.store.dispatch(ProductsActions.loadProducts());
   }
 
-  public createProduct(productData: Omit<IProduct, 'id'>): Observable<IProduct> {
-    return this.productService.createProduct(productData).pipe(
-      tap(() => {
-        this.messageService.add(this.constants.CREATE_PRODUCT_SUCCESS_MESSAGE);
-      })
-    );
+  public createProduct(productData: Omit<IProduct, 'id'>): void {
+    this.store.dispatch(ProductsActions.createProduct({ product: productData }));
   }
 
-  public updateProduct(id: number, productData: IProduct): Observable<IProduct> {
-    return this.productService.updateProduct(id, productData).pipe(
-      tap(() => {
-        this.messageService.add(this.constants.UPDATE_PRODUCT_SUCCESS_MESSAGE);
-      })
-    );
+  public updateProduct(id: number, productData: IProduct): void {
+    this.store.dispatch(ProductsActions.updateProduct({ id, product: productData }));
   }
 
-  public deleteProduct(id: number): Observable<void> {
-    return this.productService.deleteProduct(id).pipe(
-      tap(() => {
-        this.messageService.add(this.constants.DELETE_PRODUCT_SUCCESS_MESSAGE);
-      })
-    );
+  public deleteProduct(id: number): void {
+    this.store.dispatch(ProductsActions.deleteProduct({ id }));
   }
 
-  public showError(operation: string): void {
-    this.messageService.add(this.constants.SHOW_ERROR_MESSAGE(operation));
+  public setSelectedProduct(product: IProduct | null): void {
+    this.store.dispatch(ProductsActions.setSelectedProduct({ product }));
+  }
+
+  public clearSelectedProduct(): void {
+    this.store.dispatch(ProductsActions.clearSelectedProduct());
+  }
+
+  public clearError(): void {
+    this.store.dispatch(ProductsActions.clearError());
   }
 }
