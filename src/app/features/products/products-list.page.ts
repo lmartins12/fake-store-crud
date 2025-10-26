@@ -1,13 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { IProduct } from '@core/index';
 import { HeaderComponent } from '@shared/index';
 import { ConfirmationService } from 'primeng/api';
@@ -49,10 +41,10 @@ type ViewMode = 'table' | 'catalog';
 export class ProductsListPage implements OnInit {
   private readonly facade = inject(ProductsFacadeService);
   private readonly confirmationService = inject(ConfirmationService);
-  private readonly destroyRef = inject(DestroyRef);
 
-  public readonly products = signal<IProduct[]>([]);
-  public readonly loading = signal<boolean>(false);
+  public readonly products = this.facade.products$;
+  public readonly loading = this.facade.loading$;
+
   public readonly showFormDialog = signal<boolean>(false);
   public readonly showDetailsDialog = signal<boolean>(false);
   public readonly selectedProduct = signal<IProduct | null>(null);
@@ -63,20 +55,7 @@ export class ProductsListPage implements OnInit {
   }
 
   public loadProducts(): void {
-    this.loading.set(true);
-    this.facade
-      .loadProducts()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (products) => {
-          this.products.set(products);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.facade.showError('load');
-          this.loading.set(false);
-        },
-      });
+    this.facade.loadProducts();
   }
 
   public openCreateDialog(): void {
@@ -126,42 +105,20 @@ export class ProductsListPage implements OnInit {
   public handleSave(productData: Partial<IProduct>): void {
     const selectedProduct = this.selectedProduct();
 
-    this.loading.set(true);
     this.closeDialogs();
 
-    const operation$ =
-      selectedProduct && productData.id
-        ? this.facade.updateProduct(productData.id, productData as IProduct)
-        : this.facade.createProduct(productData as Omit<IProduct, 'id'>);
-
-    operation$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.loadProducts();
-      },
-      error: () => {
-        this.facade.showError(selectedProduct ? 'update' : 'create');
-        this.loading.set(false);
-      },
-    });
+    if (selectedProduct && productData.id) {
+      this.facade.updateProduct(productData.id, productData as IProduct);
+    } else {
+      this.facade.createProduct(productData as Omit<IProduct, 'id'>);
+    }
   }
 
   public handleDelete(product: IProduct): void {
     this.confirmationService.confirm({
       ...PRODUCTS_LIST_CONSTANTS.MODAL_CONFIRMATION,
       accept: () => {
-        this.loading.set(true);
-        this.facade
-          .deleteProduct(product.id)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: () => {
-              this.loadProducts();
-            },
-            error: () => {
-              this.facade.showError('delete');
-              this.loading.set(false);
-            },
-          });
+        this.facade.deleteProduct(product.id);
       },
     });
   }
