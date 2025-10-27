@@ -1,27 +1,64 @@
-# FakeStoreCrud
+# Fake Store CRUD
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Aplicação Angular 17 que implementa um CRUD completo de produtos consumindo a [Fake Store API](https://fakestoreapi.com). O projeto foca em escalabilidade, padrões modernos e código fácil de manter.
 
-## Development server
+## Sumário
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Visão Geral
+- Arquitetura e Decisões Técnicas
+- Funcionalidades Implementadas
+- Futuras Evoluções
+- Guia de Execução
+- Testes Automatizados
+- Suporte
 
-## Code scaffolding
+## Visão Geral
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Aplicação single-page construída com Change Detection `OnPush`, componentes standalone e signals para estado local. Utiliza PrimeNG como biblioteca UI, NgRx para gerenciamento global e Jest para testes unitários. A camada de estilo segue BEM, com tokens e mixins SCSS para garantir consistência e reutilização.
 
-## Build
+## Arquitetura e Decisões Técnicas
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- [`docs/architecture/overview.md`](docs/architecture/overview.md)
+- [`docs/architecture/folder-structure.md`](docs/architecture/folder-structure.md)
+- [`docs/architecture/patterns.md`](docs/architecture/patterns.md)
+- [`docs/architecture/state-management.md`](docs/architecture/state-management.md)
+- [`docs/architecture/ui.md`](docs/architecture/ui.md)
 
-## Running unit tests
+Esses documentos cobrem separação entre componentes de apresentação e containers, uso de signals, Facade Pattern com NgRx, organização modular e tokens de design.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Funcionalidades Implementadas
 
-## Running end-to-end tests
+Descrição detalhada em [`docs/features/current.md`](docs/features/current.md).
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Futuras Evoluções
 
-## Further help
+Roadmap documentado em [`docs/features/future.md`](docs/features/future.md).
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Guia de Execução
+
+- Pré-requisitos: Node.js 20+, npm 10+
+- Instalação de dependências:
+  ```bash
+  npm install
+  ```
+- Execução local:
+  ```bash
+  npm start
+  ```
+  > _Aplicação disponível em `http://localhost:4200`._
+- Build:
+  ```bash
+  npm run build
+  ```
+  Artefatos em `dist/`.
+
+## Testes Automatizados
+
+Testes unitários em Jest.
+
+- Execução: `npm test`
+- Cobertura: `npm run test:cov`
+
+## Suporte
+
+- [`docs/faq.md`](docs/faq.md)
