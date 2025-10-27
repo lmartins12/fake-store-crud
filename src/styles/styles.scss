@@ -1,7 +1,6 @@
 @import 'variables';
 @import 'typography';
 @import 'mixins';
-@import 'overrides';
 
 /**
 * ============================================
@@ -21,14 +20,6 @@ html {
 
 body {
   font-family: var(--font-family, $font-family-base);
-  font-size: $font-size-base;
-  font-weight: $font-weight-normal;
-  line-height: $line-height-normal;
-  color: var(--text-color, $text-primary);
-  background-color: var(--surface-ground, $background);
-  transition:
-    background-color $transition-base,
-    color $transition-base;
 }
 
 /**
@@ -36,7 +27,7 @@ body {
 */
 .p-datatable-loading-overlay,
 .p-dataview-loading-overlay {
-  background-color: transparent !important;
+  background-color: transparent;
 }
 
 /**
@@ -47,8 +38,8 @@ body {
 .p-dialog,
 .p-confirm-dialog {
   @media (max-width: 640px) {
-    width: calc(100vw - 32px) !important;
-    max-width: calc(100vw - 32px) !important;
+    width: calc(100vw - #{$spacing-xl}) !important;
+    max-width: calc(100vw - #{$spacing-xl}) !important;
   }
 }
 
@@ -56,8 +47,8 @@ body {
   .p-dialog-footer {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: $spacing-md;
+    padding: $spacing-lg;
 
     button {
       flex: 1;
@@ -66,7 +57,7 @@ body {
   }
 
   .p-confirm-dialog-message {
-    margin-left: 1rem;
+    margin-left: $spacing-md;
   }
 }
 
@@ -81,7 +72,7 @@ body {
 */
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: $breakpoint-xl;
   margin: 0 auto;
   padding: 0 $spacing-md;
 
@@ -95,26 +86,4 @@ body {
 */
 body {
   @include custom-scrollbar();
-}
-
-/**
-* ============================================
-*           UTILITÁRIOS DE TEXTO
-* ============================================
-*/
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.truncate {
-  @include truncate;
 }

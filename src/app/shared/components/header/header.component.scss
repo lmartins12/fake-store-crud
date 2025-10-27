@@ -1,10 +1,12 @@
+@import 'variables';
+
 .header {
-  padding: 16px;
+  padding: $spacing-md;
 
   &__start {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: $spacing-md;
     flex-wrap: wrap;
   }
 
@@ -12,23 +14,23 @@
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--contrast-color);
-    margin-right: 1rem;
+    margin-right: $spacing-md;
   }
 
   &__end {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: $spacing-sm;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $breakpoint-md) {
     &__title {
       font-size: 1rem;
-      margin-right: 0.5rem;
+      margin-right: $spacing-sm;
     }
 
     &__start {
-      gap: 0.5rem;
+      gap: $spacing-sm;
     }
   }
 }
