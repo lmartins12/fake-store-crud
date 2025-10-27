@@ -2,19 +2,26 @@
 
 Aplicação Angular 17 que implementa um CRUD completo de produtos consumindo a [Fake Store API](https://fakestoreapi.com). O projeto foca em escalabilidade, padrões modernos e código fácil de manter.
 
-## Sumário
+- [Links](#links)
+- [Visão Geral](#visão-geral)
+- [Arquitetura e Decisões Técnicas](#arquitetura-e-decisões-técnicas)
+- [Funcionalidades Implementadas](#funcionalidades-implementadas)
+- [Futuras Evoluções](#futuras-evoluções)
+- [Guia de Execução](#guia-de-execução)
+- [Testes](#testes)
+- [Suporte](#suporte)
 
-- Visão Geral
-- Arquitetura e Decisões Técnicas
-- Funcionalidades Implementadas
-- Futuras Evoluções
-- Guia de Execução
-- Testes Automatizados
-- Suporte
+## Links
+
+- **Documentação:** hospedada no GitHub Pages, contém detalhes sobre arquitetura, setup e exemplos de uso.  
+  [Acessar documentação →](https://lmartins12.github.io/fake-store-crud/)
+
+- **Aplicação em produção:** versão compilada do projeto Angular hospedada na Vercel.  
+  [Acessar o site →](https://fake-store-crud-ten.vercel.app/products)
 
 ## Visão Geral
 
-Aplicação single-page construída com Change Detection `OnPush`, componentes standalone e signals para estado local. Utiliza PrimeNG como biblioteca UI, NgRx para gerenciamento global e Jest para testes unitários. A camada de estilo segue BEM, com tokens e mixins SCSS para garantir consistência e reutilização.
+Single-Page Application (SPA) construída com Change Detection `OnPush`, componentes `standalone` e `signals` para estado local. Utiliza `PrimeNG` como biblioteca UI e configuração de temas, `NgRx` para gerenciamento de estado e `Jest` para testes unitários. A camada de estilo segue o padrão `BEM`, com tokens e mixins `SCSS` para garantir consistência e reutilização.
 
 ## Arquitetura e Decisões Técnicas
 
@@ -36,7 +43,12 @@ Roadmap documentado em [`docs/features/future.md`](docs/features/future.md).
 
 ## Guia de Execução
 
-- Pré-requisitos: Node.js 20+, npm 10+
+_Pré-requisitos:_ Git, Node.js 20+, npm 10+
+
+- Clone o projeto:
+  ```bash
+  git clone https://github.com/lmartins12/fake-store-crud.git
+  ```
 - Instalação de dependências:
   ```bash
   npm install
@@ -52,13 +64,32 @@ Roadmap documentado em [`docs/features/future.md`](docs/features/future.md).
   ```
   Artefatos em `dist/`.
 
-## Testes Automatizados
+## Testes
 
-Testes unitários em Jest.
+Os testes unitários do projeto são implementados com **Jest**, garantindo alta cobertura e execução rápida.
 
-- Execução: `npm test`
-- Cobertura: `npm run test:cov`
+**Comandos:**
+
+```bash
+# Executar todos os testes
+npm test
+
+# Gerar relatório de cobertura
+npm run test:cov
+```
+
+**Resumo da cobertura atual:**
+
+| Statements | Branches | Functions | Lines |
+| ---------- | -------- | --------- | ----- |
+| 100%       | 80%      | 100%      | 100%  |
+
+> **Nota:** A cobertura de branches está em 80% devido a _false uncovered lines_ reportadas pelo Jest em alguns **Effects** do NgRx.
 
 ## Suporte
 
 - [`docs/faq.md`](docs/faq.md)
+
+## Autor
+
+Desenvolvido por [Lucas Martins](https://github.com/lmartins12).
