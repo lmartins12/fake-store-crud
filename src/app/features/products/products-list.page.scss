@@ -1,27 +1,23 @@
+@import 'variables';
+
 .products-page {
-  padding: 16px;
+  padding: $spacing-md;
   margin: 0 auto;
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
     flex-wrap: wrap;
-    gap: 1rem;
-  }
+    gap: $spacing-md;
 
-  &__header-actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  &__title-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+      flex-wrap: wrap;
+    }
   }
 
   &__title {
@@ -29,6 +25,12 @@
     font-size: 2rem;
     font-weight: 700;
     color: var(--text-color);
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      gap: $spacing-md;
+    }
   }
 
   &__view-icon {
@@ -36,8 +38,8 @@
     color: var(--primary-color);
     cursor: pointer;
     transition: all 0.3s ease;
-    padding: 0.5rem;
-    border-radius: 8px;
+    padding: $spacing-sm;
+    border-radius: var(--border-radius);
     outline: none;
 
     &:hover {
@@ -56,16 +58,16 @@
 
   &__content {
     background-color: var(--surface-card);
-    border-radius: 8px;
-    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    padding: $spacing-lg;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
-  @media (max-width: 768px) {
-    padding: 1rem;
+  @media (max-width: $breakpoint-md) {
+    padding: $spacing-md;
 
     &__content {
-      padding: 1rem;
+      padding: $spacing-md;
     }
   }
 }
